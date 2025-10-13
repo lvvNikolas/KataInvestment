@@ -1,12 +1,13 @@
-.hero {
+/* Hero — full screen */
+.hero{
   position: relative;
-  min-height: 88vh;
+  min-height: 100svh;              /* корректная высота на мобилках iOS/Android */
   display: flex;
-  align-items: flex-end;
+  align-items: center;             /* центрируем контент по вертикали */
   overflow: hidden;
 }
 
-.hero-video {
+.hero-video{
   position: absolute;
   inset: 0;
   width: 100%;
@@ -14,25 +15,36 @@
   object-fit: cover;
 }
 
-.hero-overlay {
+.hero-overlay{
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.7),
-    rgba(0, 0, 0, 0.4),
-    rgba(0, 0, 0, 0.4)
+    180deg,
+    rgba(0,0,0,.55),
+    rgba(0,0,0,.35) 40%,
+    rgba(0,0,0,.55)
   );
 }
 
-.hero-body {
+.hero-body{
   position: relative;
   z-index: 1;
-  padding-bottom: 112px;
+  width: 100%;
 }
 
-.hero-buttons {
+.hero-body .h1{
+  max-width: min(900px, 92vw);
+}
+
+.hero-buttons{
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+/* Более щадящий вариант для тех, кто отключает анимации */
+@media (prefers-reduced-motion: reduce){
+  .hero-video{ display: none; }
+  .hero{ background: url('/media/hero.jpg') center/cover no-repeat; }
 }

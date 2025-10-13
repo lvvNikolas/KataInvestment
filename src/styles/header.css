@@ -1,98 +1,80 @@
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
+.header{
+  position: fixed; inset-inline: 0; top: 0; z-index: 50;
+  height: var(--header-h);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(10px);
-  background: rgba(0, 0, 0, 0.3);
+  background: color-mix(in srgb, black 28%, transparent);
 }
 
-.header-inner {
-  display: flex;
+/* Внутри: логотип слева, ссылки по центру, бургер справа */
+.header-inner{
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  padding: 16px 0;
+  gap: 16px;
 }
+.logo{ display:flex; align-items:center; gap:10px; color:var(--text); text-decoration:none }
+.logo-text{ font-weight:600; letter-spacing:.4px }
 
-/* Logo */
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: var(--text);
-}
-.logo-text {
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-/* Desktop navigation */
-.nav {
+/* Desktop nav — центрирование */
+.nav{
   display: none;
   align-items: center;
-  gap: 32px;
-  font-size: 0.9375rem;
+  justify-content: center;   /* центр! */
+  gap: 28px;
+  font-size: .95rem;
 }
+@media (min-width: 1024px){ .nav{ display:flex } }
 
-.nav a {
-  color: rgba(255, 255, 255, 0.75);
+/* Ссылки — эффекты */
+.nav a{
+  position: relative;
+  color: rgba(255,255,255,.78);
   text-decoration: none;
-  transition: color 0.2s;
+  padding: 6px 2px;
+  transition: color .2s ease, transform .2s ease;
+  will-change: color, transform;
+}
+.nav a:hover{ color:#fff; transform: translateY(-1px); }
+
+/* underline scan effect */
+.nav a::after{
+  content:""; position:absolute; left:0; right:0; bottom:-10px; height:2px; border-radius:2px;
+  background: linear-gradient(90deg, transparent, var(--brand-accent), transparent);
+  transform: scaleX(0); transform-origin: center;
+  transition: transform .25s ease;
+}
+.nav a:hover::after{ transform: scaleX(1); }
+
+/* active state — тихий индикатор */
+.nav a.active{ color:#fff; }
+.nav a.active::after{
+  transform: scaleX(1);
+  background: var(--brand-accent);
 }
 
-.nav a:hover {
-  color: #fff;
+/* Burger on the right */
+.burger{
+  justify-self: end;
+  display:inline-flex; width:40px; height:40px;
+  align-items:center; justify-content:center;
+  border:1px solid rgba(255,255,255,.25); border-radius:10px;
+  background: transparent; color:#fff;
 }
-
-/* Burger button */
-.burger {
-  display: inline-flex;
-  width: 40px;
-  height: 40px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 10px;
-  background: transparent;
-  color: white;
-}
-
-@media (min-width: 768px) {
-  .nav {
-    display: flex;
-  }
-  .burger {
-    display: none;
-  }
-}
+@media (min-width: 1024px){ .burger{ display:none } }
 
 /* Mobile menu */
-.mobile {
+.mobile{
+  position: fixed; inset: var(--header-h) 0 0 0; z-index: 49;
+  background: rgba(0,0,0,.86);
   border-top: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.85);
 }
-
-.mobile-inner {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 16px 0;
-}
-
-.mobile a {
-  color: rgba(255, 255, 255, 0.8);
+.mobile-inner{ display:flex; flex-direction:column; gap: 14px; padding: 16px 0; }
+.mobile a{
+  color: rgba(255,255,255,.9);
   text-decoration: none;
   padding: 10px 0;
 }
-
-.mobile a:hover {
-  color: #fff;
-}
-
-.mobile .cta {
-  width: max-content;
-  margin-top: 8px;
-}
+.mobile a.active{ color:#fff; font-weight:600; }
+.mobile a:hover{ color:#fff; }
