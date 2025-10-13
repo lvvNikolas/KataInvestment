@@ -1,54 +1,235 @@
-.about-grid {
+/* =========================================================
+   About — KATA Investment
+   Mobile-first. Clean rhythm. Media queries at the bottom.
+   ========================================================= */
+
+/* ---------- Top: text + photo ---------- */
+
+.about-top {
   display: grid;
-  gap: 40px;
+  gap: clamp(20px, 4vw, 40px);
+  align-items: center;
 }
 
+.about-text { align-self: start; }
+
+.about-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;                 /* базовое соотношение на телефонах */
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  background: var(--brand-soft);
+}
+
+.about-img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  filter: brightness(0.95);
+  transition: transform 4s ease, filter .3s ease;
+}
+
+/* деликатный hover только на курсоре */
+@media (hover: hover) and (pointer: fine) {
+  .about-img:hover { transform: scale(1.035); filter: brightness(1); }
+}
+
+/* ---------- Facts: centered band under the top block ---------- */
+
+.about-facts {
+  margin-top: clamp(48px, 9vh, 80px);
+  padding-block: clamp(28px, 8vh, 56px);
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,.03));
+  border-top: 1px solid rgba(255,255,255,.08);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  backdrop-filter: blur(4px);
+}
+
+.facts-inner {
+  display: flex;
+  flex-direction: column;              /* stack на мобилках */
+  align-items: center;
+  justify-content: center;
+  gap: clamp(24px, 5vw, 36px);
+  flex-wrap: wrap;                      /* не ломаемся на очень узких экранах */
+}
+
+.fact {
+  text-align: center;
+  padding: 10px 16px;
+  min-width: 160px;                     /* стабильная ширина колонки факта */
+  border-left: 1px solid rgba(255,255,255,.08);
+  border-right: 1px solid rgba(255,255,255,.08);
+  transition: transform .35s ease, border-color .25s ease;
+}
+.fact:first-child { border-left-color: transparent; }
+.fact:last-child  { border-right-color: transparent; }
+
+.fact:hover { transform: translateY(-3px); border-color: var(--brand-accent); }
+
+.fact-number {
+  font-size: clamp(44px, 8vw, 80px);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.06;
+  color: var(--text);
+  text-shadow: 0 0 14px rgba(142,230,255,.18);
+  transition: color .3s ease;
+}
+.fact:hover .fact-number { color: var(--brand-accent); }
+
+.fact-label {
+  margin-top: 8px;
+  font-size: .9rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.72);
+}
+
+/* ---------- Section title ---------- */
+
+.section-title {
+  text-align: center;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: .05em;
+  color: var(--text);
+  margin-bottom: clamp(40px, 8vh, 72px);
+  position: relative;
+  text-transform: uppercase;
+}
+.section-title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 14px auto 0;
+  background: linear-gradient(90deg, var(--brand-accent), var(--brand-gold));
+  border-radius: 2px;
+  opacity: .9;
+  transform-origin: center;
+  transition: transform .8s ease;
+}
+.section-title:hover::after { transform: scaleX(1.12); }
+
+/* =========================================================
+   MEDIA QUERIES (mobile-first)
+   ========================================================= */
+
+/* Very small phones (≤375px) */
+@media (max-width: 375px) {
+  .about-photo { aspect-ratio: 1 / 1; border-radius: 16px; }
+  .fact       { min-width: 140px; padding: 8px 12px; }
+  .fact-number{ font-size: clamp(36px, 9vw, 64px); }
+  .fact-label { font-size: .82rem; letter-spacing: .08em; }
+}
+
+/* ≥600px — compact tablets / large phones */
+@media (min-width: 600px) {
+  .facts-inner { gap: clamp(28px, 6vw, 44px); }
+  .about-photo { aspect-ratio: 4 / 3; border-radius: 20px; }
+}
+
+/* ≥768px — tablets portrait */
 @media (min-width: 768px) {
-  .about-grid {
-    grid-template-columns: 7fr 5fr;
-    align-items: start;
+  .facts-inner { flex-direction: row; gap: clamp(40px, 7vw, 72px); }
+  .fact        { padding: 12px 18px; }
+  .fact-number { font-size: clamp(52px, 7vw, 84px); }
+}
+
+/* ≥1024px — laptops */
+@media (min-width: 1024px) {
+  .about-top   { grid-template-columns: 1fr 1fr; gap: clamp(28px, 4vw, 48px); }
+  .about-photo { aspect-ratio: 16 / 10; border-radius: 22px; }
+}
+
+/* ≥1280px — desktops */
+@media (min-width: 1280px) {
+  .about-top   { gap: clamp(32px, 3.5vw, 56px); }
+  .fact        { padding: 14px 20px; }
+  .fact-number { font-size: clamp(60px, 6vw, 92px); }
+}
+
+/* ≥1600px — large screens */
+@media (min-width: 1600px) {
+  .about-top   { gap: 56px; }
+  .facts-inner { gap: 96px; }
+  .fact-number { font-size: 96px; }
+}
+
+/* =========================================================
+   Fallbacks / iOS
+   ========================================================= */
+
+/* iOS < 15 без aspect-ratio */
+@supports not (aspect-ratio: 1 / 1) {
+  .about-photo { height: 0; padding-top: 75%; position: relative; }   /* 4:3 */
+  .about-photo > .about-img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   }
 }
 
-/* Left side */
-.about-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
+/* Фолбэк, если изображение не загрузилось (onError в компоненте) */
+.about-photo--fallback {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+    radial-gradient(1200px 400px at 20% -10%, rgba(142,230,255,.08), transparent 60%),
+    var(--brand-soft);
+}
+.about-photo--fallback::before {
+  content: "Image unavailable";
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  color: rgba(255,255,255,.6);
+  font-size: .9rem; letter-spacing: .06em;
 }
 
-.about-card {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  background: var(--surface);
+/* Уважение reduced-motion: убираем «долгий» hover-эффект */
+@media (prefers-reduced-motion: reduce) {
+  .about-img { transition: none; }
 }
 
-.about-card-key {
-  font-size: 0.875rem;
-  color: var(--text-dim);
+/* --- Fix: mobile image fits nicely on narrow phones --- */
+
+/* Базово ограничим высоту и центрируем кадр */
+.about-photo {
+  max-height: min(60vh, 520px);
+  margin-inline: auto;
+  contain: paint;            /* тень/радиус не раздувают макет */
+}
+.about-img {
+  object-position: 50% 50%;  /* центрируем фокус */
 }
 
-.about-card-value {
-  margin-top: 8px;
-  font-size: 1.75rem;
-  font-weight: 600;
+/* iPhone 14/13/12 и ниже (≤430px ширина вьюпорта) */
+@media (max-width: 430px) {
+  .about-photo {
+    aspect-ratio: 16 / 10;   /* шире — значит ниже и «влезает» по высоте */
+    max-height: 52vh;        /* дополнительный стопер по высоте */
+    border-radius: 16px;
+  }
 }
 
-/* Right side */
-.about-principles {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  background: var(--surface-2);
-  backdrop-filter: blur(6px);
+/* Очень узкие (SE/старые) */
+@media (max-width: 360px) {
+  .about-photo {
+    aspect-ratio: 16 / 11;   /* ещё чуть ниже, чтобы исключить прокрутку */
+    max-height: 48vh;
+    border-radius: 14px;
+  }
 }
 
-.about-principles ul {
-  list-style: disc;
-  padding-left: 20px;
-  margin-top: 16px;
-  display: grid;
-  gap: 8px;
-  color: var(--text-dim);
+/* Подстраховка от горизонтального скролла из-за теней/подсветок */
+.container { overflow-x: clip; }
+
+/* Fallback для iOS < 15 без aspect-ratio (пересобранный, с ограничением высоты) */
+@supports not (aspect-ratio: 1 / 1) {
+  .about-photo { height: 0; padding-top: 62.5%; /* ~16:10 */ max-height: none; }
+  .about-photo > .about-img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  }
 }

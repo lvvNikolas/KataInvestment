@@ -1,37 +1,39 @@
-/* ===== Reset ===== */
+/* ===============================
+   Global styles — KATA Investment
+   =============================== */
+
+/* Reset */
 *, *::before, *::after { box-sizing: border-box; }
 html, body, #__next { height: 100%; margin: 0; padding: 0; }
 img, video { display: block; max-width: 100%; height: auto; }
 button, input, textarea { font: inherit; }
 
-/* ===== Theme Variables ===== */
-:root {
+/* Theme variables (charcoal) */
+:root{
   color-scheme: dark;
 
-  --brand-bg: #0C1222;
-  --brand-soft: #10172A;
-  --brand-accent: #94F0FF;
-  --brand-gold: #CDB67D;
+  --brand-bg:   #0b0c10;       /* глубокий charcoal фон */
+  --brand-soft: #111216;       /* мягкие поверхности */
+  --brand-accent: #8ee6ff;     /* холодный акцент */
+  --brand-gold:   #cdb67d;     /* вторичный акцент */
 
   --text: #ffffff;
-  --text-dim: rgba(255,255,255,0.8);
+  --text-dim: rgba(255,255,255,.78);
 
-  --border: rgba(255,255,255,0.12);
-  --surface: rgba(255,255,255,0.04);
-  --surface-2: rgba(255,255,255,0.06);
+  --border:   rgba(255,255,255,.10);
+  --surface:  rgba(255,255,255,.04);
+  --surface-2:rgba(255,255,255,.06);
 
-  --shadow: 0 8px 30px rgba(0,0,0,0.12);
+  --shadow: 0 14px 42px rgba(0,0,0,.35);
   --container: 1200px;
 
-  /* header height for anchor-offset */
+  /* header height for anchor offset */
   --header-h: 64px;
 }
-@media (min-width: 1024px) {
-  :root { --header-h: 72px; }
-}
+@media (min-width:1024px){ :root{ --header-h:72px; } }
 
-/* ===== Base ===== */
-body {
+/* Base */
+body{
   background: var(--brand-bg);
   color: var(--text);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
@@ -40,84 +42,91 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth scrolling (auto-disabled for prefers-reduced-motion below) */
-html { scroll-behavior: smooth; }
+/* Smooth scroll (auto-disabled in reduced motion) */
+html{ scroll-behavior: smooth; }
 
-/* ===== Layout Helpers ===== */
-.container {
-  max-width: var(--container);
-  margin-inline: auto;
-  padding-inline: 16px;
-}
+/* Layout helpers */
+.container{ max-width: var(--container); margin-inline:auto; padding-inline:16px; }
 
 /* Full-screen sections by default */
-.section {
-  min-height: 100svh;                 /* safe viewport height for mobile UIs */
+.section{
+  min-height: 100svh;                 /* корректная высота на мобилках */
   display: flex;
-  align-items: center;                 /* center content vertically */
+  align-items: center;                 /* вертикальный центр */
   padding-block: clamp(48px, 6vh, 128px);
-  scroll-margin-top: var(--header-h);  /* anchors don't hide under header */
+  scroll-margin-top: var(--header-h);  /* якоря не прячутся под хедером */
 }
-/* If some block shouldn't be full-screen, give it class 'compact'. */
-.section.compact { min-height: auto; }
+.section.compact{ min-height: auto; }  /* для коротких блоков */
 
-/* ===== Typography ===== */
-.h1 {
+/* Typography */
+.h1{
   font-size: 2.25rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.1;
 }
-@media (min-width: 768px) {
-  .h1 { font-size: 3.75rem; }
-}
+@media (min-width:768px){ .h1{ font-size: 3.75rem; } }
 
-.h2 {
+.h2{
   font-size: 2rem;
   font-weight: 600;
   line-height: 1.15;
 }
-@media (min-width: 768px) {
-  .h2 { font-size: 3rem; }
-}
+@media (min-width:768px){ .h2{ font-size: 3rem; } }
 
-.h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-}
+.h3{ font-size: 1.5rem; font-weight: 600; }
 
-.p {
+.p{
   font-size: 1rem;
   color: var(--text-dim);
 }
-@media (min-width: 768px) {
-  .p { font-size: 1.125rem; }
+@media (min-width:768px){ .p{ font-size: 1.125rem; } }
+
+/* Utilities */
+.text-glow{ text-shadow: 0 0 24px rgba(142,230,255,.45); }
+
+.mt-3{ margin-top:12px; }
+.mt-6{ margin-top:24px; }
+.mt-8{ margin-top:32px; }
+.mt-10{ margin-top:40px; }
+.pb-28{ padding-bottom:112px; }
+
+.maxw-2xl{ max-width:680px; }
+.maxw-4xl{ max-width:900px; }
+
+/* Focus visibility */
+:focus-visible{ outline: 2px solid var(--brand-accent); outline-offset: 2px; }
+
+/* Screen-reader only */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
 }
 
-/* ===== Utilities ===== */
-.text-glow { text-shadow: 0 0 24px rgba(148,240,255,0.5); }
-
-/* Spacing */
-.mt-3 { margin-top: 12px; }
-.mt-6 { margin-top: 24px; }
-.mt-8 { margin-top: 32px; }
-.mt-10 { margin-top: 40px; }
-.pb-28 { padding-bottom: 112px; }
-
-/* Width helpers */
-.maxw-2xl { max-width: 680px; }
-.maxw-4xl { max-width: 900px; }
-
-/* Accessibility */
-.sr-only {
-  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+/* Reduced motion / battery-friendly */
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+  .hero-video{ display:none !important; }
+  .hero{ background: url('/media/hero.jpg') center / cover no-repeat; }
 }
 
-/* ===== Reduced Motion / battery-friendly ===== */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }              /* disable smooth scroll */
-  /* Hide heavy background video if present; hero.css sets a fallback image */
-  .hero-video { display: none !important; }
-  .hero { background: url('/media/hero.jpg') center / cover no-repeat; }
+/* ==== iOS viewport & safe-area fixes ==== */
+
+/* Позволяет -webkit-fill-available работать корректно */
+html, body { height: -webkit-fill-available; }
+
+/* Герой и секции — сначала современный юнит, затем fallback */
+.hero, .section { min-height: 100svh; }
+@supports not (height: 100svh) {
+  .hero, .section { min-height: 100vh; min-height: -webkit-fill-available; }
+}
+
+/* Safe-area для фиксированного хедера и низа */
+.header { padding-top: env(safe-area-inset-top); }
+body { padding-bottom: env(safe-area-inset-bottom); }
+
+/* Если нет backdrop-filter — упрощаем фон, чтобы не лагало */
+@supports not ((-webkit-backdrop-filter: blur(4px)) or (backdrop-filter: blur(4px))) {
+  .header { background: rgba(0,0,0,.6); }
+  .about-facts { background: rgba(255,255,255,.03); }
 }
