@@ -1,55 +1,79 @@
+/* ===== Strategies Section ===== */
+
 .strategies {
-  background: linear-gradient(
-    to bottom,
-    var(--brand, #0c1222),
-    rgba(12, 18, 34, 0.95),
-    rgba(0, 0, 0, 0.2)
-  );
+  background: var(--brand-bg);
+  text-align: center;
 }
 
-/* Сетка карточек */
 .strategies-grid {
   display: grid;
-  gap: 24px;
-  margin-top: 40px;
+  gap: clamp(24px, 4vw, 40px);
+  grid-template-columns: 1fr;
+  margin-top: clamp(32px, 8vh, 64px);
 }
 
-@media (min-width: 768px) {
-  .strategies-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* Карточка */
 .strategy-card {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 24px;
-  transition: background 0.25s ease, transform 0.25s ease;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  background: var(--brand-soft);
+  border-radius: 18px;
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: left;
+  transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
 .strategy-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-2px);
+  transform: translateY(-6px);
+  border-color: var(--brand-accent);
+  box-shadow: 0 12px 40px rgba(0, 200, 255, 0.15);
 }
 
-/* Текст */
-.strategy-aum {
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
+.strategy-image {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
-.strategy-title {
-  margin-top: 8px;
-  font-size: 1.25rem;
+.strategy-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.8s ease;
+}
+
+.strategy-card:hover img {
+  transform: scale(1.05);
+}
+
+.strategy-card h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
   font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
 }
 
-.strategy-blurb {
-  margin-top: 12px;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.95rem;
-  line-height: 1.5;
+.strategy-card p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.6;
+}
+
+/* ===== Responsive Layouts ===== */
+@media (min-width: 768px) {
+  .strategies-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .strategies-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .strategy-card {
+    text-align: center;
+  }
+  .strategy-card h3 {
+    font-size: 1.4rem;
+  }
 }

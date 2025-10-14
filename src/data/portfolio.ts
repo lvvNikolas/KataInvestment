@@ -1,8 +1,33 @@
-export const portfolio = [
-  { name: "AcmeTech", logo: "/logos/portfolio/acmetech.svg", sector: "Software" },
-  { name: "MedPulse", logo: "/logos/portfolio/medpulse.svg", sector: "Healthcare" },
-  { name: "FinNest", logo: "/logos/portfolio/finnest.svg", sector: "Fintech" },
-  { name: "GridForge", logo: "/logos/portfolio/gridforge.svg", sector: "Industrial Tech" },
-  { name: "ClearPort", logo: "/logos/portfolio/clearport.svg", sector: "Logistics" },
-  { name: "GreenLux", logo: "/logos/portfolio/greenlux.svg", sector: "Sustainability" },
+export type PortfolioTile = {
+  title: string;
+  tags: string[];          // ["BUYOUT","TECHNOLOGY"]
+  image: string;           // /media/portfolio/ai-dream.jpg
+  href?: string;           // ссылка на кейс/сайт
+};
+
+export const portfolioTiles: PortfolioTile[] = [
+  {
+    title: "A dream come true: establishing AI Dream in China",
+    tags: ["AI DREAM", "BUYOUT"],
+    image: "/media/portfolio/ai-dream.jpg",
+    href: "#",
+  },
+  {
+    title: "Banking on software",
+    tags: ["BUYOUT", "TECHNOLOGY"],
+    image: "/media/portfolio/banking-software.jpg",
+    href: "#",
+  },
+  {
+    title: "Scaling specialty care with data",
+    tags: ["HEALTHCARE", "GROWTH"],
+    image: "/media/portfolio/healthcare-scale.jpg",
+    href: "#",
+  },
+  {
+    title: "Building resilient supply platforms",
+    tags: ["INDUSTRIALS", "SPECIAL SITUATIONS"],
+    image: "/media/portfolio/industrials-supply.jpg",
+    href: "#",
+  },
 ];
