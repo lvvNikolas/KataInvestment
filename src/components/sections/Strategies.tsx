@@ -31,7 +31,7 @@ const strategies = [
 
 export default function Strategies() {
   return (
-    <section id="strategy" className="section strategies">
+    <section id="strategies" className="section strategies"  aria-labelledby="strategies-title">
       <div className="container">
         <motion.h2
           className="section-title"

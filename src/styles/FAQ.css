@@ -1,0 +1,130 @@
+/* =========================================================
+   FAQ — Premium dark, glassy cards, smooth micro-interactions
+   Mobile-first. Uses your global variables & buttons.
+   ========================================================= */
+
+.faq { background: var(--brand-bg); }
+
+/* Header */
+.faq-header { text-align: center; max-width: 880px; margin: 0 auto 40px; }
+.faq-kicker {
+  color: rgba(255,255,255,.78);
+  margin-top: 10px;
+  font-size: 1rem;
+}
+
+/* Two-column grid (stacks on mobile) */
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 2vw, 24px);
+}
+@media (min-width: 960px) {
+  .faq-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Glass cards */
+.faq-card {
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  padding: clamp(16px, 2.2vw, 22px);
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.faq-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(148,240,255,.35);
+  box-shadow: 0 16px 36px rgba(0,0,0,.36), 0 0 24px rgba(148,240,255,.10) inset;
+}
+
+.faq-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 14px;
+}
+.faq-title { font-size: 1.25rem; font-weight: 700; letter-spacing: .01em; }
+.faq-pill {
+  font-size: .78rem; letter-spacing: .08em; text-transform: uppercase;
+  padding: 6px 10px; border-radius: 999px;
+  color: rgba(255,255,255,.86);
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+}
+
+/* Accordion list */
+.faq-list { display: grid; gap: 10px; }
+
+/* Single item */
+.faq-item {
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  background: rgba(255,255,255,.03);
+  overflow: hidden;
+  transition: border-color .25s ease, background .25s ease;
+}
+.faq-item.is-open { border-color: rgba(148,240,255,.35); background: rgba(255,255,255,.035); }
+
+/* Trigger button */
+.faq-trigger {
+  width: 100%;
+  padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  background: transparent; border: 0; color: var(--text);
+  font: inherit; text-align: left; cursor: pointer;
+}
+.faq-trigger:focus-visible { outline: 2px solid var(--brand-accent); outline-offset: 2px; }
+
+.faq-q { font-weight: 600; letter-spacing: .01em; }
+
+/* Plus → close icon animation */
+.faq-icon {
+  width: 22px; height: 22px; display: grid; place-items: center;
+  color: rgba(255,255,255,.9);
+}
+.faq-plus, .faq-plus::before {
+  content: ""; display: block; width: 14px; height: 2px; background: currentColor;
+  transition: transform .25s ease, opacity .25s ease;
+}
+.faq-plus::before { transform: rotate(90deg); }
+.faq-item.is-open .faq-plus::before { transform: rotate(0deg); opacity: 0; }
+
+/* Panel with smooth height & opacity */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .32s ease, padding .32s ease, opacity .32s ease;
+  padding: 0 16px; opacity: .0;
+}
+.faq-item.is-open .faq-panel { grid-template-rows: 1fr; padding: 0 16px 14px; opacity: 1; }
+
+.faq-panel > * { overflow: hidden; }
+
+.faq-a {
+  color: rgba(235,235,235,.88);
+  line-height: 1.65;
+  padding-top: 2px;
+}
+
+/* Section CTA */
+.faq-cta {
+  display: flex; gap: 12px; justify-content: center;
+  margin-top: clamp(20px, 6vh, 36px);
+}
+
+/* Reuse your button styles; just ensure .btn classes exist globally */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 12px; padding: 12px 18px; font-weight: 600;
+  text-decoration: none; cursor: pointer;
+  transition: transform .2s ease, opacity .2s ease, box-shadow .2s ease;
+}
+.btn:hover { transform: translateY(-1px); opacity: .95; }
+
+.btn-primary { background: #fff; color: #000; }
+.btn-outline {
+  border: 1px solid rgba(255,255,255,.22);
+  color: #fff; background: transparent;
+}
+.btn-outline:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.08) inset; }
