@@ -1,58 +1,186 @@
-.contact-grid {
+/* =========================================================
+   Contact — premium dark with animated purple orb
+   ========================================================= */
+
+.contact {
+  position: relative;
+  background: rgba(255,255,255,.02);
+  overflow: hidden;         /* чтобы шар не давал горизонтального скролла */
+  isolation: isolate;
+}
+
+/* Animated purple orb */
+.contact::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -15%;
+  width: clamp(480px, 50vw, 900px);
+  height: clamp(480px, 50vw, 900px);
+  border-radius: 999px;
+  background:
+    radial-gradient(closest-side, rgba(122,92,255,.45), rgba(122,92,255,0) 65%),
+    radial-gradient(closest-side, rgba(148,240,255,.16), rgba(148,240,255,0) 70%);
+  filter: blur(42px);
+  opacity: .7;
+  pointer-events: none;
+  z-index: -1;
+  animation: orbDrift 16s ease-in-out infinite;
+}
+
+/* Smooth, premium floating path */
+@keyframes orbDrift {
+  0%   { transform: translate(-6%, -4%) scale(1); }
+  25%  { transform: translate(55%, 8%)  scale(1.06); }
+  50%  { transform: translate(75%, -10%) scale(1.02); }
+  75%  { transform: translate(35%, 18%) scale(1.08); }
+  100% { transform: translate(-6%, -4%) scale(1); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .contact::before { animation: none; }
+}
+
+/* Inner container always centered */
+.contact-inner {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+/* Title block at the very top */
+.contact-head {
+  text-align: center;
+  margin-bottom: clamp(18px, 4vh, 28px);
+}
+.contact-head .section-title { margin-bottom: 10px; }
+.contact-sub {
+  margin-inline: auto;
+  max-width: 820px;
+  color: rgba(235,235,235,.86);
+}
+
+/* Centered form card wrapper */
+.contact-card {
   display: grid;
-  gap: 32px;
-  align-items: center;
+  place-items: center;
 }
 
-@media (min-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 7fr 5fr; /* 7/5 как было в Tailwind */
-  }
-}
-
+/* Form card */
 .contact-form {
-  border: 1px solid var(--border);
-  background: var(--surface);
+  width: min(760px, 100%);
+  border: 1px solid rgba(255,255,255,.12);
   border-radius: 16px;
-  padding: 24px;
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(4px);
+  background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.025));
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  padding: clamp(16px, 2.2vw, 22px);
 }
 
+/* Honeypot hidden */
+.hp {
+  position: absolute !important;
+  left: -99999px !important;
+  width: 1px; height: 1px; opacity: 0; pointer-events: none;
+}
+
+/* Fields grid */
 .contact-fields {
   display: grid;
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+@media (min-width: 620px) {
+  .contact-fields { grid-template-columns: 1fr 1fr; }
+  .field-span { grid-column: 1 / -1; }
 }
 
+/* Inputs */
 .field {
   width: 100%;
-  border: 1px solid rgba(255,255,255,0.2);
-  background: transparent;
-  border-radius: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(255,255,255,.04);
+  color: var(--text);
   padding: 12px 14px;
   outline: none;
-  color: var(--text);
+  transition: border-color .25s ease, background .25s ease, box-shadow .25s ease;
 }
-
-.field::placeholder {
-  color: rgba(255,255,255,0.6);
-}
-
+.field::placeholder { color: rgba(255,255,255,.55); }
 .field:focus {
-  border-color: rgba(255,255,255,0.5);
+  border-color: rgba(122,92,255,.55);
+  background: rgba(255,255,255,.06);
+  box-shadow: 0 0 0 3px rgba(122,92,255,.18);
 }
 
-.contact-submit {
-  width: 100%;
-  margin-top: 16px;
-}
+/* Submit button */
+.contact-submit { margin-top: 8px; width: 100%; }
 
+/* Legal */
 .contact-legal {
-  margin-top: 8px;
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
+  margin-top: 10px;
+  font-size: .85rem;
+  color: rgba(230,230,235,.72);
 }
 
-/* Column helpers for clarity (семантика вместо md:col-span-*) */
-.contact-left {}
-.contact-right {}
+/* Inline status as fallback */
+.contact-status {
+  margin-top: 10px;
+  min-height: 20px;
+  font-size: .95rem;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity .25s ease, transform .25s ease;
+}
+.contact-status.is-ok { color: #b6ffec; opacity: 1; transform: translateY(0); }
+.contact-status.is-err { color: #ffb5ad; opacity: 1; transform: translateY(0); }
+
+/* Modal */
+.contact-modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(6,10,20,.6);
+  backdrop-filter: blur(6px);
+  display: grid; place-items: center;
+  z-index: 60;
+  animation: modalFade .2s ease both;
+}
+.contact-modal {
+  width: min(520px, 92vw);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: radial-gradient(80% 120% at 80% 0%, rgba(122,92,255,.15), rgba(122,92,255,0) 60%),
+              rgba(20,26,40,.92);
+  box-shadow: 0 24px 48px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.06) inset;
+  padding: 24px;
+  text-align: center;
+  animation: modalPop .22s ease-out both;
+}
+.contact-modal-icon {
+  width: 54px; height: 54px; margin: 6px auto 10px;
+  border-radius: 999px;
+  display: grid; place-items: center;
+  color: #0b1a16;
+  background: #b6ffec;
+  font-weight: 800;
+  box-shadow: 0 6px 18px rgba(182,255,236,.35);
+}
+.contact-modal-title {
+  font-size: 1.35rem; font-weight: 700; letter-spacing: .01em;
+  margin-top: 6px; color: #f6f7f8;
+}
+.contact-modal-desc {
+  margin-top: 8px; color: rgba(235,235,240,.85); line-height: 1.65;
+}
+.contact-modal-btn { margin-top: 14px; width: 100%; }
+
+@keyframes modalFade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes modalPop  {
+  from { opacity: 0; transform: translateY(8px) scale(.98) }
+  to   { opacity: 1; transform: translateY(0) scale(1) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-modal, .contact-modal-backdrop { animation: none !important; }
+  .contact::before, .contact, .field, .btn, .contact-status { transition: none !important; }
+}
