@@ -1,80 +1,297 @@
-.portfolio-header {
+/* =====================================================================
+   Portfolio — фильтры + карточки инвестиций
+   Mobile-first • Премиальный тёмный стиль • Ровная сетка / единая высота
+   ===================================================================== */
+
+/* Секция */
+.pf {
+  background: var(--brand-bg);
+}
+
+/* ------------------------------------------------------------------ */
+/* 1) ПАНЕЛЬ ФИЛЬТРОВ (Sector / Region / Status / Search)             */
+/* ------------------------------------------------------------------ */
+
+.pf-filter-row {
+  display: grid;
+  grid-template-columns: 1fr;                 /* мобила: одна колонка */
+  gap: 14px;
+  margin: clamp(8px, 3vh, 20px) 0 clamp(8px, 3vh, 16px);
+}
+
+@media (min-width: 1100px) {
+  .pf-filter-row {
+    grid-template-columns: repeat(4, 1fr);    /* десктоп: 4 колонки */
+    gap: 18px;
+  }
+}
+
+/* Общая «плашка» под select / input */
+.pf-box {
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.04);
+  overflow: hidden;
+  transition:
+    border-color .25s ease,
+    background .25s ease,
+    box-shadow .25s ease,
+    transform .25s ease;
+}
+
+.pf-box:hover {
+  border-color: rgba(148,240,255,.45);
+  background: rgba(255,255,255,.06);
+  box-shadow: 0 4px 18px rgba(0,0,0,.18);
+  transform: translateY(-1px);
+}
+
+/* Плюс справа у select’ов */
+.pf-plus {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  line-height: 1;
+  color: rgba(255,255,255,.85);
+  pointer-events: none;
+}
+
+/* Выпадашки */
+.pf-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: clamp(16px, 1.15vw, 18px);
+  padding: 16px 44px 16px 16px;               /* запас под + */
+  cursor: pointer;
+}
+
+/* Поиск */
+.pf-box--search { position: relative; }
+
+.pf-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: clamp(16px, 1.15vw, 18px);
+  padding: 16px 44px 16px 16px;
+}
+
+.pf-search-ic {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: rgba(255,255,255,.85);
+  pointer-events: none;
+}
+
+/* Фокус подсвечиваем на «плашке»-родителе */
+.pf-select:focus,
+.pf-input:focus { border: none; }
+
+.pf-select:focus-visible,
+.pf-input:focus-visible,
+.pf-box:has(.pf-select:focus),
+.pf-box:has(.pf-input:focus) {
+  outline: none;
+  border-color: rgba(148,240,255,.6);
+  background: rgba(255,255,255,.07);
+  box-shadow: 0 0 0 3px rgba(148,240,255,.14);
+}
+
+/* Светлая тема (опционально)
+:root.light .pf-box { background:#f4f6f7; border-color:#e6eaef; }
+:root.light .pf-plus, :root.light .pf-search-ic { color:#0c1222; }
+:root.light .pf-box:hover { background:#eef1f5; border-color:#cfd7e3; }
+*/
+
+/* ------------------------------------------------------------------ */
+/* 2) СЕТКА КАРТОЧЕК                                                  */
+/* ------------------------------------------------------------------ */
+
+.pf-grid {
+  display: grid;
+  gap: clamp(16px, 2.2vw, 24px);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  align-items: stretch;                        /* строки одинаковой высоты */
+  margin-top: clamp(10px, 3vh, 16px);
+}
+
+@media (max-width: 380px) {                    /* супермаленькие экраны */
+  .pf-grid { grid-template-columns: 1fr; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 3) КАРТОЧКА                                                        */
+/* ------------------------------------------------------------------ */
+
+.pf-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  height: 100%;
+  min-height: clamp(260px, 28vh, 340px);       /* единая «полка» высоты */
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  background: rgba(255,255,255,.03);
+  padding: clamp(16px, 2.2vw, 20px);
+  transition:
+    transform .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease,
+    background .35s ease;
+}
+
+.pf-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(148,240,255,.40);
+  background: rgba(255,255,255,.035);
+  box-shadow:
+    0 12px 28px rgba(148,240,255,.08),
+    0 6px 18px rgba(0,0,0,.36);
+}
+
+/* Верх: логотип + бейджи */
+.pf-card-top {
+  display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
 }
 
-@media (min-width: 768px) {
-  .portfolio-header {
-    flex-direction: row;
-    align-items: flex-end;
-    gap: 24px;
-  }
-}
-
-/* Pitch button */
-.pitch-btn {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .pitch-btn {
-    display: inline-flex;
-    padding: 12px 20px;
-  }
-}
-
-/* Grid */
-.portfolio-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
-  margin-top: 40px;
-}
-
-@media (min-width: 768px) {
-  .portfolio-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1024px) {
-  .portfolio-grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-/* Cards */
-.portfolio-card {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.02);
-  padding: 24px;
-  text-align: left;
-  transition: background 0.25s ease;
-}
-
-.portfolio-card:hover {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-/* Logo */
-.portfolio-logo {
+.pf-logo {
   position: relative;
-  height: 40px;
+  width: clamp(140px, 18vw, 180px);
+  height: 44px;                                /* одинаковая рамка для логотипов */
 }
 
-/* Text */
-.portfolio-sector {
+.pf-logo img {
+  object-fit: contain;
+  filter: grayscale(.15);
+  opacity: .92;
+  transition: opacity .3s ease, filter .3s ease;
+}
+.pf-card:hover .pf-logo img {
+  filter: grayscale(0);
+  opacity: 1;
+}
+
+/* Бейджи «стеклянные» */
+.pf-meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pf-badge {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: .78rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  color: rgba(255,255,255,.86);
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.08);
+  backdrop-filter: blur(8px);
+
+  transition: color .25s ease, border-color .25s ease, background .25s ease;
+}
+.pf-badge--muted { opacity: .72; }
+
+.pf-card:hover .pf-badge {
+  border-color: rgba(148,240,255,.30);
+  color: #aef3ff;
+}
+
+/* Заголовок (одна строка) */
+.pf-title {
+  margin: 12px 0 6px;
+  font-weight: 600;
+  font-size: 1.15rem;
+  letter-spacing: .015em;
+  color: #f6f6f7;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  transition: color .25s ease;
+}
+.pf-card:hover .pf-title { color: #94f0ff; }
+
+/* Описание (до 3 строк) */
+.pf-desc {
+  margin: 0 0 12px;
+  color: rgba(235,235,235,.80);
+  font-size: .94rem;
+  line-height: 1.65;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  transition: color .25s ease;
+}
+.pf-card:hover .pf-desc { color: rgba(255,255,255,.90); }
+
+/* Низ: регион/год прижаты к низу */
+.pf-row {
+  margin-top: auto;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: rgba(200,200,200,.74);
+}
+.pf-sub {
+  font-size: .9rem;
+  letter-spacing: .02em;
+}
+
+/* Пустая выдача */
+.pf-empty {
+  text-align: center;
+  color: rgba(255,255,255,.75);
   margin-top: 16px;
-  font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.6);
 }
 
-.portfolio-name {
-  margin-top: 4px;
-  font-weight: 500;
-  font-size: 1rem;
+/* Компактнее на очень узких экранах */
+@media (max-width: 380px) {
+  .pf-logo { width: 130px; height: 40px; }
+  .pf-desc { -webkit-line-clamp: 2; }
+}
+
+/* ------------------------------------------------------------------ */
+/* 4) ССЫЛКИ ВНУТРИ КАРТОЧЕК — БЕЗ ПОДЧЁРКИВАНИЙ                      */
+/* ------------------------------------------------------------------ */
+
+.pf-card a,
+.pf-card a:visited,
+.pf-card a:hover,
+.pf-card a:focus,
+.pf-card a:active {
+  text-decoration: none;
+  color: inherit;                               /* цвет как у текста */
+}
+
+.pf-card a:focus-visible {
+  outline: 2px solid var(--brand-accent);
+  outline-offset: 2px;
 }

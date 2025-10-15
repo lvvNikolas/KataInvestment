@@ -9,7 +9,7 @@ export const portfolioTiles: PortfolioTile[] = [
   {
     title: "A dream come true: establishing AI Dream in China",
     tags: ["AI DREAM", "BUYOUT"],
-    image: "/media/portfolio/ai-dream.jpg",
+    image: "/media/portfolio/AIDream-RedGraphic-square.webp",
     href: "#",
   },
   {
