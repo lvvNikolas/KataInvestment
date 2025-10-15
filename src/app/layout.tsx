@@ -2,12 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { site } from "@/lib/metadata";
 
-// === Global styles (custom CSS only) ===
 import "@/styles/globals.css";
 import "@/styles/layout.css";
 import "@/styles/buttons.css";
 
-// === Font setup ===
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
@@ -26,17 +24,26 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-icon.png",
+    // основное
+    icon: [
+      { url: "/favicon.ico" },                             // fallback
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon.png", type: "image/png", sizes: "16x16" },
+      { url: "/favicon.svg", type: "image/svg+xml" },     // если есть
+    ],
+    // iOS homescreen
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    // некоторые браузеры учитывают это как «shortcut icon»
+    shortcut: [{ url: "/favicon.ico" }],
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        {children}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
