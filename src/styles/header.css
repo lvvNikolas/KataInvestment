@@ -1,80 +1,202 @@
+/* =========================
+   Header (fixed, glassy)
+   ========================= */
 .header{
-  position: fixed; inset-inline: 0; top: 0; z-index: 50;
-  height: var(--header-h);
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 50;
+  height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  padding-top: env(safe-area-inset-top, 0px);
   border-bottom: 1px solid var(--border);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   background: color-mix(in srgb, black 28%, transparent);
 }
 
-/* Внутри: логотип слева, ссылки по центру, бургер справа */
+/* Inner grid: logo | nav | actions */
 .header-inner{
-  height: 100%;
+  height: var(--header-h);
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  grid-template-columns: 1fr auto 1fr;  /* logo | nav | actions/burger */
   align-items: center;
   gap: 16px;
 }
-.logo{ display:flex; align-items:center; gap:10px; color:var(--text); text-decoration:none }
+
+/* On mobile: logo | burger (strictly right) */
+@media (max-width: 1023px){
+  .header-inner{
+    grid-template-columns: 1fr auto;
+  }
+}
+
+/* =========================
+   Branding
+   ========================= */
+.logo{
+  display:flex; align-items:center; gap:10px;
+  color:var(--text); text-decoration:none;
+}
 .logo-text{ font-weight:600; letter-spacing:.4px }
 
-/* Desktop nav — центрирование */
+/* =========================
+   Desktop nav
+   ========================= */
 .nav{
-  display: none;
-  align-items: center;
-  justify-content: center;   /* центр! */
-  gap: 28px;
-  font-size: .95rem;
+  display:none;
+  align-items:center;
+  justify-content:center;  /* center the links */
+  gap:28px;
+  font-size:.95rem;
 }
-@media (min-width: 1024px){ .nav{ display:flex } }
+@media (min-width:1024px){ .nav{ display:flex } }
 
-/* Ссылки — эффекты */
 .nav a{
-  position: relative;
-  color: rgba(255,255,255,.78);
-  text-decoration: none;
-  padding: 6px 2px;
+  position:relative;
+  color:rgba(255,255,255,.78);
+  text-decoration:none;
+  padding:6px 2px;
   transition: color .2s ease, transform .2s ease;
   will-change: color, transform;
 }
 .nav a:hover{ color:#fff; transform: translateY(-1px); }
 
-/* underline scan effect */
+/* subtle underline scan */
 .nav a::after{
-  content:""; position:absolute; left:0; right:0; bottom:-10px; height:2px; border-radius:2px;
-  background: linear-gradient(90deg, transparent, var(--brand-accent), transparent);
-  transform: scaleX(0); transform-origin: center;
-  transition: transform .25s ease;
+  content:"";
+  position:absolute; left:0; right:0; bottom:-10px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--brand-accent),transparent);
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .25s ease;
 }
-.nav a:hover::after{ transform: scaleX(1); }
+.nav a:hover::after{ transform:scaleX(1) }
+.nav a.active{ color:#fff }
+.nav a.active::after{ transform:scaleX(1); background:var(--brand-accent) }
 
-/* active state — тихий индикатор */
-.nav a.active{ color:#fff; }
-.nav a.active::after{
-  transform: scaleX(1);
-  background: var(--brand-accent);
+/* =========================
+   Right actions (desktop)
+   ========================= */
+.nav-login{ justify-self:end; display:none }
+@media (min-width:1024px){ .nav-login{ display:block } }
+
+.login-btn{
+  display:inline-block; padding:8px 18px;
+  border:1px solid rgba(148,240,255,.40);
+  border-radius:999px;
+  color:#f0f6f9; font-weight:500; font-size:.95rem; letter-spacing:.03em; text-decoration:none;
+  transition: color .25s ease, border-color .25s ease, box-shadow .25s ease, background .25s ease;
+}
+.login-btn:hover{
+  border-color:rgba(148,240,255,.9); color:#94f0ff;
+  box-shadow:0 0 16px rgba(148,240,255,.25);
+  background:rgba(148,240,255,.06);
 }
 
-/* Burger on the right */
+/* =========================
+   Burger (one button toggles)
+   ========================= */
 .burger{
-  justify-self: end;
-  display:inline-flex; width:40px; height:40px;
+  justify-self:end;
+  display:inline-flex;
+  width:40px; height:40px;
   align-items:center; justify-content:center;
-  border:1px solid rgba(255,255,255,.25); border-radius:10px;
-  background: transparent; color:#fff;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:10px;
+  background:transparent; color:#fff;
+  transition: border-color .2s ease, background .2s ease;
 }
-@media (min-width: 1024px){ .burger{ display:none } }
+.burger:hover{ border-color:rgba(148,240,255,.5); background:rgba(255,255,255,.06) }
+@media (min-width:1024px){ .burger{ display:none } }
 
-/* Mobile menu */
+/* внутри кнопки две иконки; переключаем по data-open */
+.burger .icon{ transition: opacity .15s ease, transform .15s ease }
+.burger .icon-close{ display:none }
+.burger[data-open="true"] .icon-hamb{ display:none }
+.burger[data-open="true"] .icon-close{ display:block }
+
+/* =========================
+   Mobile overlay (full-viewport)
+   ========================= */
 .mobile{
-  position: fixed; inset: var(--header-h) 0 0 0; z-index: 49;
-  background: rgba(0,0,0,.86);
-  border-top: 1px solid var(--border);
+  position: fixed;
+  inset: 0;                 /* перекрывает весь экран, включая хедер */
+  z-index: 999;
+  background: rgba(0,0,0,.94); /* плотный чёрный фон */
+  -webkit-overflow-scrolling: touch;
 }
-.mobile-inner{ display:flex; flex-direction:column; gap: 14px; padding: 16px 0; }
-.mobile a{
-  color: rgba(255,255,255,.9);
-  text-decoration: none;
-  padding: 10px 0;
+
+/* «лист» меню: внутренняя область */
+.mobile-sheet{
+  position: absolute;
+  inset: calc(env(safe-area-inset-top,0px)) 0 0 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
 }
-.mobile a.active{ color:#fff; font-weight:600; }
-.mobile a:hover{ color:#fff; }
+
+/* кнопка закрытия внутри оверлея */
+.mobile-close{
+  position: absolute;
+  right: 16px;
+  top: calc(16px + env(safe-area-inset-top,0px));
+  width: 40px; height: 40px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 10px;
+  background: transparent; color: #fff;
+  font-size: 18px; line-height: 1;
+  cursor: pointer;
+  z-index: 2;
+}
+.mobile-close:hover{
+  border-color: rgba(148,240,255,.5);
+  background: rgba(255,255,255,.06);
+}
+
+/* центрирование меню */
+.mobile-inner{
+  flex: 1;
+  display:flex; align-items:center; justify-content:center;
+  padding:32px 0;
+}
+
+/* Centered link list */
+.mobile-nav{
+  display:flex; flex-direction:column; align-items:center; gap:16px; text-align:center;
+}
+.mobile-nav a{
+  color:rgba(255,255,255,.92);
+  text-decoration:none;
+  font-size:1.25rem;
+  padding:8px 0;
+}
+.mobile-nav a.active{ color:#fff; font-weight:600 }
+.mobile-nav a:hover{ color:#fff }
+
+/* Divider + Login in overlay */
+.mobile-divider{
+  width:min(280px, 70vw);
+  height:1px;
+  margin:8px 0 4px;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.2), transparent);
+}
+.mobile-login{
+  display:block; margin-top:6px; padding:10px 24px;
+  border-radius:999px; text-decoration:none; color:#eaf7fb;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(148,240,255,.25);
+}
+.mobile-login:hover{
+  background:rgba(148,240,255,.08);
+  border-color:rgba(148,240,255,.5);
+  color:#fff;
+}
+
+/* =========================
+   Reduce motion
+   ========================= */
+@media (prefers-reduced-motion: reduce){
+  .nav a, .nav a::after, .login-btn, .burger,
+  .mobile-close { transition:none !important; }
+}
