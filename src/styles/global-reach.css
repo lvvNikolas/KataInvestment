@@ -1,0 +1,137 @@
+/* src/styles/global-reach.css */
+
+/* Контейнер секции */
+.gr {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Фоновое видео */
+.gr-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.05) brightness(0.9);
+}
+
+/* Тёмный градиент для читабельности */
+.gr-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(70% 70% at 50% 30%, rgba(0,0,0,0.1), rgba(0,0,0,0.65) 60%, rgba(0,0,0,0.85));
+}
+
+/* Внутренний слой */
+.gr-body {
+  position: relative;
+  z-index: 1;
+  padding-block: clamp(48px, 10vh, 120px);
+  text-align: center;
+}
+
+.section-title {
+  margin: 0;
+}
+
+/* ✨ Подзаголовок под H2 */
+.gr-sub {
+  margin: 10px auto 36px;
+  color: rgba(255,255,255,0.78);
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  letter-spacing: .02em;
+}
+
+/* Сетка часов во всю ширину */
+.gr-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(16px, 3vw, 32px) clamp(16px, 4vw, 48px);
+  align-items: start;
+  justify-content: center;
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+@media (max-width: 1100px) {
+  .gr-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 900px) {
+  .gr-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 640px) {
+  .gr-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 420px) {
+  .gr-grid { grid-template-columns: 1fr; }
+}
+
+/* Элемент часов — плавное поочерёдное появление */
+@keyframes gr-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+.gr-item {
+  opacity: 0;
+  animation: gr-fade-in .7s ease forwards;
+}
+
+/* Название города */
+.gr-city {
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+  letter-spacing: .02em;
+  margin-bottom: 6px;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+}
+
+/* Строка времени */
+.gr-time {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* ✨ Свечение цифр */
+.gr-digit {
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #fff;
+  text-shadow:
+    0 0 18px rgba(148,240,255,0.25),
+    0 0 40px rgba(148,240,255,0.10);
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,.35));
+}
+
+/* Мигающие двоеточия */
+@keyframes gr-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.1; }
+}
+.gr-colon {
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-weight: 800;
+  color: rgba(255,255,255,0.85);
+  animation: gr-blink 1s steps(2, end) infinite;
+}
+
+/* AM / PM */
+.gr-ampm {
+  font-size: .9rem;
+  text-transform: lowercase;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: .12em;
+}
+
+/* Анимации уважительно выключаем при reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  .gr-item { animation: none; opacity: 1; }
+  .gr-colon { animation: none; }
+}

@@ -5,6 +5,7 @@ import Strategies from "@/components/sections/Strategies";
 import Portfolio from "@/components/sections/Portfolio";
 import FAQ from "@/components/sections/FAQ";
 import ContactCTA from "@/components/sections/ContactCTA";
+import GlobalReach from "@/components/sections/GlobalReach";
 import Footer from "@/components/Footer";
 
 export default function HomePage() {
@@ -22,6 +23,7 @@ export default function HomePage() {
       <Portfolio />
       <FAQ />
       <ContactCTA />
+      <GlobalReach /> 
 
       {/* Footer */}
       <Footer />
