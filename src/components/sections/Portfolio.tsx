@@ -6,24 +6,29 @@ import Link from "next/link";
 import { categories, investments, type Category } from "@/data/investments";
 import "@/styles/portfolio.css";
 
-/**
- * Компонент: список инвестиций с фильтрами
- * - Фильтры: Sector / Region / Status / Search
- * - Сетка карточек с ровной высотой
- * - Логотипы через next/image (с нормализацией пути)
- */
+/** Фильтр статуса без any */
+type StatusFilter = "All" | "Active" | "Exited";
+
+/** Узкий type-guard для Category */
+function isCategory(v: string): v is Category {
+  return (categories as readonly string[]).includes(v);
+}
+
+/** Узкий type-guard для Status */
+function isStatus(v: string): v is Exclude<StatusFilter, "All"> {
+  return v === "Active" || v === "Exited";
+}
+
 export default function Portfolio() {
   // ------------ Состояние фильтров ------------
   const [sector, setSector] = useState<"All" | Category>("All");
   const [region, setRegion] = useState<"All" | string>("All");
-  const [status, setStatus] = useState<"All" | "Active" | "Exited">("All");
+  const [status, setStatus] = useState<StatusFilter>("All");
   const [q, setQ] = useState("");
 
   // ------------ Данные для выпадашек ------------
-  // Сектора — из заранее экспортированного списка
   const sectors = ["All", ...categories] as const;
 
-  // Уникальные регионы из массива данных
   const regions = useMemo(() => {
     const r = new Set<string>();
     investments.forEach((i) => i.region && r.add(i.region));
@@ -37,16 +42,39 @@ export default function Portfolio() {
     return investments.filter((it) => {
       const okSector = sector === "All" ? true : it.category === sector;
       const okRegion = region === "All" ? true : it.region === region;
-      const okStatus = status === "All" ? true : (it.status ?? "Active") === status;
+      const okStatus =
+        status === "All" ? true : (it.status ?? "Active") === status;
 
       const okText =
         needle.length === 0
           ? true
-          : `${it.name} ${it.description} ${it.region ?? ""}`.toLowerCase().includes(needle);
+          : `${it.name} ${it.description} ${it.region ?? ""}`
+              .toLowerCase()
+              .includes(needle);
 
       return okSector && okRegion && okStatus && okText;
     });
   }, [sector, region, status, q]);
+
+  // ------------ Хендлеры без any ------------
+  const handleSectorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const v = e.target.value;
+    setSector(v === "All" ? "All" : isCategory(v) ? v : "All");
+  };
+
+  const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const v = e.target.value;
+    setRegion(v);
+  };
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const v = e.target.value;
+    setStatus(v === "All" ? "All" : isStatus(v) ? v : "All");
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setQ(e.target.value);
+  };
 
   return (
     <section id="portfolio" className="section pf" aria-labelledby="pf-title">
@@ -66,7 +94,7 @@ export default function Portfolio() {
               id="pf-sector"
               className="pf-select"
               value={sector}
-              onChange={(e) => setSector(e.target.value as any)}
+              onChange={handleSectorChange}
             >
               {sectors.map((s) => (
                 <option key={s} value={s}>
@@ -88,7 +116,7 @@ export default function Portfolio() {
               id="pf-region"
               className="pf-select"
               value={region}
-              onChange={(e) => setRegion(e.target.value)}
+              onChange={handleRegionChange}
             >
               {regions.map((r) => (
                 <option key={r} value={r}>
@@ -110,9 +138,9 @@ export default function Portfolio() {
               id="pf-status"
               className="pf-select"
               value={status}
-              onChange={(e) => setStatus(e.target.value as any)}
+              onChange={handleStatusChange}
             >
-              {["All", "Active", "Exited"].map((s) => (
+              {(["All", "Active", "Exited"] as const).map((s) => (
                 <option key={s} value={s}>
                   {s === "All" ? "Status" : s}
                 </option>
@@ -133,7 +161,7 @@ export default function Portfolio() {
               className="pf-input"
               type="search"
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={handleSearchChange}
               placeholder="Search"
             />
             <svg className="pf-search-ic" viewBox="0 0 24 24" aria-hidden="true">
@@ -152,24 +180,18 @@ export default function Portfolio() {
         {/* ======================== СЕТКА КАРТОЧЕК ======================== */}
         <div className="pf-grid">
           {filtered.map((it) => {
-            // ВАЖНО: нормализуем URL (для next/image обязателен ведущий слэш
-            // или абсолютный адрес). Так мы убираем ошибку `Invalid URL`.
             const logoSrc = it.logo?.startsWith("/") ? it.logo : `/${it.logo}`;
-
-            // Внутренние ссылки лучше вести через <Link/>, внешние — <a target="_blank">
-            const isExternal = it.href?.startsWith("http");
+            const isExternal = !!it.href && /^https?:\/\//i.test(it.href);
 
             const CardInner = (
               <>
                 <div className="pf-card-top">
                   <div className="pf-logo">
-                    {/* fill требует parent с position:relative и заданными размерами */}
                     <Image
                       src={logoSrc}
                       alt={it.name}
                       fill
                       sizes="(max-width: 1200px) 40vw, 240px"
-                      // priority можно включить для первых 2-3 карточек, если нужно
                     />
                   </div>
                   <div className="pf-meta">
@@ -193,7 +215,7 @@ export default function Portfolio() {
             return isExternal ? (
               <a
                 key={it.name}
-                href={it.href ?? "#"}
+                href={it.href}
                 className="pf-card"
                 target="_blank"
                 rel="noreferrer"

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import aboutImg from "@/../public/media/about.jpg";
 import "@/styles/about.css";
 
-/** Тип одного факта */
+/** One fact item */
 type Fact = {
   id: string;
   label: string;
@@ -15,48 +15,52 @@ type Fact = {
   suffix?: string;
 };
 
-/** Данные для фактов (строго соответствуют типу Fact) */
-const FACTS: readonly Fact[] = [
+const FACTS: ReadonlyArray<Fact> = [
   { id: "aum",     label: "ASSETS UNDER MANAGEMENT", value: 86, prefix: "$", suffix: "B" },
   { id: "years",   label: "YEARS’ EXPERIENCE",       value: 15,               suffix: "+" },
   { id: "sectors", label: "SECTORS INVESTED",        value: 12 },
-] as const;
+];
 
-/** Наблюдение за видимостью (дженерик, типобезопасно) */
+/** Intersection Observer hook without unstable deps warnings */
 function useInView<T extends Element>(
   ref: React.RefObject<T | null>,
-  options: IntersectionObserverInit = { threshold: 0.3 }
+  opts?: IntersectionObserverInit
 ) {
   const [visible, setVisible] = useState(false);
+  // Стабилизируем опции один раз
+  const options = useMemo<IntersectionObserverInit>(
+    () => ({ threshold: 0.3, ...opts }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [] // опции фиксируем на монтировании, не меняем между рендерами
+  );
+
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || visible) return;
+
     const io = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         setVisible(true);
         io.disconnect();
       }
     }, options);
+
     io.observe(el);
     return () => io.disconnect();
-  }, [ref, options.root, options.rootMargin, options.threshold]);
+  }, [ref, options, visible]);
+
   return visible;
 }
 
-/** Плавный счётчик (уважает reduced motion) */
-function Counter({
-  to,
-  prefix = "",
-  suffix = "",
-  duration = 2500,
-  className,
-}: {
+/** Smooth counter that respects reduced motion */
+function Counter(props: {
   to: number;
   prefix?: string;
   suffix?: string;
-  duration?: number;
+  duration?: number; // ms
   className?: string;
 }) {
+  const { to, prefix = "", suffix = "", duration = 2500, className } = props;
   const prefersReducedMotion = useReducedMotion();
   const [val, setVal] = useState(prefersReducedMotion ? to : 0);
 
@@ -65,11 +69,13 @@ function Counter({
     let raf = 0;
     const start = performance.now();
     const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
+
     const tick = (t: number) => {
       const p = Math.min(1, (t - start) / duration);
       setVal(Math.round(to * easeOutQuart(p)));
       if (p < 1) raf = requestAnimationFrame(tick);
     };
+
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
   }, [to, duration, prefersReducedMotion]);
@@ -81,13 +87,13 @@ export default function About() {
   const sectionRef = useRef<HTMLDivElement | null>(null);
   const factsRef   = useRef<HTMLDivElement | null>(null);
 
-  const titleIn = useInView<HTMLDivElement>(sectionRef, { threshold: 0.3 });
-  const factsIn = useInView<HTMLDivElement>(factsRef,   { threshold: 0.3 });
+  const titleIn = useInView(sectionRef, { threshold: 0.3 });
+  const factsIn = useInView(factsRef,   { threshold: 0.3 });
 
   return (
     <section id="about" className="section about" aria-labelledby="about-title">
       <div className="container" ref={sectionRef}>
-        {/* Заголовок секции */}
+        {/* Section title */}
         <motion.h2
           id="about-title"
           className="section-title"
@@ -98,13 +104,14 @@ export default function About() {
           About Us
         </motion.h2>
 
-        {/* Верх: текст + фото */}
+        {/* Top: text + photo */}
         <div className="about-top">
           <div className="about-text">
             <h3 className="h2">Private. Strategic. Enduring.</h3>
             <p className="p mt-6 maxw-2xl">
               KATA Investment is a private investment firm supporting exceptional founders and companies.
-              We invest across sectors with a long-term perspective, focusing on partnership, discipline, and sustainable value creation.
+              We invest across sectors with a long-term perspective, focusing on partnership, discipline,
+              and sustainable value creation.
             </p>
           </div>
 
@@ -116,16 +123,12 @@ export default function About() {
               sizes="(max-width: 1200px) 100vw, 520px"
               placeholder="blur"
               className="about-img"
-              onError={(e) => {
-                const img = e.currentTarget as HTMLImageElement;
-                img.style.opacity = "0";
-                img.parentElement?.classList.add("about-photo--fallback");
-              }}
+              // Next/Image сам обрабатывает ошибки загрузки; дополнительная логика не обязательна.
             />
           </figure>
         </div>
 
-        {/* Низ: факты по центру */}
+        {/* Bottom: facts strip (centered) */}
         <motion.div
           ref={factsRef}
           className="about-facts"
@@ -140,13 +143,9 @@ export default function About() {
           <div className="facts-inner">
             {FACTS.map((f) => (
               <div key={f.id} className="fact">
-                <div className="fact-number" aria-live="polite">
+                <div className="fact-number" aria-live="polite" aria-atomic="true">
                   {factsIn ? (
-                    <Counter
-                      to={f.value}
-                      prefix={f.prefix ?? ""}
-                      suffix={f.suffix ?? ""}
-                    />
+                    <Counter to={f.value} prefix={f.prefix} suffix={f.suffix} />
                   ) : (
                     <span>{(f.prefix ?? "")}0{(f.suffix ?? "")}</span>
                   )}
