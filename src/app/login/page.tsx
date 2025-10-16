@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import "@/styles/login.css";
 
 export default function LoginPage() {
@@ -11,18 +12,14 @@ export default function LoginPage() {
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setPending(true);
-
-    // TODO: replace with your real auth call
-    await new Promise((r) => setTimeout(r, 900));
-
+    await new Promise((r) => setTimeout(r, 900)); // mock request
     setPending(false);
-    // Navigate or show a toast/modal as you prefer
     // router.push("/dashboard");
   }
 
   return (
     <main className="login-page" aria-labelledby="login-title">
-      {/* Background video (optional). Falls back to gradient if video missing */}
+      {/* Background video */}
       <video
         className="login-bg"
         src="/media/earth.mp4"
@@ -34,16 +31,17 @@ export default function LoginPage() {
       />
       <div className="login-overlay" aria-hidden />
 
-      {/* Centered glass card */}
+      {/* Glass card */}
       <section className="login-card" role="region" aria-label="Sign in">
         <header className="login-head">
           <div className="login-brand">
-            <img
+            <Image
               src="/logos/kata-mark.svg"
-              alt="KATA"
+              alt="KATA logo"
               width={28}
               height={28}
               className="login-logo"
+              priority
             />
             <span className="login-brand-text">KATA Investment</span>
           </div>
