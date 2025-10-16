@@ -1,13 +1,14 @@
-/* Hero — full screen */
-.hero{
+/* ========== HERO ========== */
+.hero {
   position: relative;
-  min-height: 100svh;              /* корректная высота на мобилках iOS/Android */
+  min-height: 100svh;
   display: flex;
-  align-items: center;             /* центрируем контент по вертикали */
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
 }
 
-.hero-video{
+.hero-video {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -15,36 +16,69 @@
   object-fit: cover;
 }
 
-.hero-overlay{
+.hero-overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(0,0,0,.55),
-    rgba(0,0,0,.35) 40%,
-    rgba(0,0,0,.55)
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 40%,
+    rgba(0, 0, 0, 0.6) 100%
   );
 }
 
-.hero-body{
+.hero-body {
   position: relative;
   z-index: 1;
   width: 100%;
+  text-align: left;
 }
 
-.hero-body .h1{
+/* ========== TEXT ANIMATION ========== */
+.hero-title {
   max-width: min(900px, 92vw);
+  line-height: 1.15;
+  font-weight: 700;
+  color: #fff;
 }
 
-.hero-buttons{
+.hero-word {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  background: linear-gradient(90deg, #ffffff, #c8ecff, #ffffff);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: none;
+}
+
+.hero:hover .hero-word {
+  animation: textShine 3s linear infinite;
+}
+
+@keyframes textShine {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* Buttons */
+.hero-buttons {
   display: flex;
-  gap: 16px;
   flex-wrap: wrap;
-  margin-top: 28px;
+  gap: 16px;
+  margin-top: 32px;
 }
 
-/* Более щадящий вариант для тех, кто отключает анимации */
-@media (prefers-reduced-motion: reduce){
-  .hero-video{ display: none; }
-  .hero{ background: url('/media/hero.jpg') center/cover no-repeat; }
+/* Static fallback for no-motion users */
+@media (prefers-reduced-motion: reduce) {
+  .hero-word {
+    animation: none !important;
+    color: #fff !important;
+    background: none !important;
+  }
 }

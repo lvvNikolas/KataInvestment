@@ -3,18 +3,21 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
 
-  // Разрешаем изображения с Unsplash
+  // Конфигурация изображений
   images: {
-    unoptimized: true, // обязательно для next export
+    unoptimized: true, // обязательно, если делаем статический экспорт
     remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
     ],
   },
 
-  // Генерация полностью статического билда
+  // Генерация полностью статического сайта
   output: "export",
 
-  // Можно убрать или поставить true, если хостинг требует / на конце
+  // Опция слэша в конце пути
   trailingSlash: false,
 };
 

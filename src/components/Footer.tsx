@@ -38,7 +38,13 @@ export default function Footer() {
                   </linearGradient>
                 </defs>
                 <rect width="24" height="24" rx="6" fill="url(#katag)" opacity=".25" />
-                <path d="M6 16l6-8 6 8" stroke="url(#katag)" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+                <path
+                  d="M6 16l6-8 6 8"
+                  stroke="url(#katag)"
+                  strokeWidth="1.6"
+                  fill="none"
+                  strokeLinecap="round"
+                />
               </svg>
               <span className="footer-wordmark">KATA Investment</span>
             </a>
@@ -77,7 +83,16 @@ export default function Footer() {
             <div className="footer-address">
               <div className="footer-address-lines">
                 <span>Irvine, CA</span>
-                <span>40 Pacifica Street</span>
+                <span className="footer-flag-line">
+                  40 Pacifica Street
+                  <img
+                    src="https://flagcdn.com/us.svg"
+                    alt="United States flag"
+                    className="footer-flag"
+                    width={20}
+                    height={14}
+                  />
+                </span>
               </div>
               <a
                 href="tel:+15623309823"
@@ -123,7 +138,7 @@ export default function Footer() {
 
         {/* Bottom bar */}
         <div className="footer-bottom">
-          <p className="footer-copy">© {year} KATA Investment. All rights reserved.</p>
+          <p className="footer-copy">© {year} KATA Investment LLC. All rights reserved.</p>
           <div className="footer-bottom-links" role="navigation" aria-label="Footer secondary">
             <a href="#" className="footer-small-link">Privacy</a>
             <a href="#" className="footer-small-link">Terms</a>
