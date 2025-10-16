@@ -9,8 +9,8 @@ import "@/styles/about.css";
 /** Данные для фактов */
 const FACTS = [
   { id: "aum",     label: "ASSETS UNDER MANAGEMENT", value: 86, prefix: "$", suffix: "B" },
-  { id: "years",   label: "YEARS’ EXPERIENCE",       value: 30,               suffix: "+" },
-  { id: "offices", label: "OFFICES GLOBALLY",        value: 12 },
+  { id: "years",   label: "YEARS’ EXPERIENCE",       value: 15,               suffix: "+" },
+  { id: "offices", label: "SECTORS INVESTED",        value: 12 },
 ] as const;
 
 /** Наблюдение за видимостью (дженерик, типобезопасно) */
@@ -82,10 +82,10 @@ export default function About() {
         {/* Верх: текст + фото */}
         <div className="about-top">
           <div className="about-text">
-            <h3 className="h2">Independent. Long-term. Aligned.</h3>
+            <h3 className="h2">Private. Strategic. Enduring.</h3>
             <p className="p mt-6 maxw-2xl">
-              KATA Investment is an independent investment firm backing exceptional founders and management teams.
-              We emphasize partnership, governance, and disciplined underwriting across cycles.
+              KATA Investment is a private investment firm supporting exceptional founders and companies.
+              We invest across sectors with a long-term perspective, focusing on partnership, discipline, and sustainable value creation.
             </p>
           </div>
 

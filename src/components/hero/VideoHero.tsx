@@ -62,7 +62,7 @@ export default function VideoHero() {
           transition={{ duration: 0.8 }}
           className="h1 text-glow"
         >
-          Capital for builders of enduring companies.
+          KATA Investment — a private investment firm providing capital for builders of enduring companies.
         </motion.h1>
 
         <motion.p
@@ -71,7 +71,7 @@ export default function VideoHero() {
           transition={{ duration: 0.9, delay: 0.1 }}
           className="p mt-6 maxw-2xl"
         >
-          We partner across growth, buyout and special situations with a long-term, fundamentals-first approach.
+          We focus on private investments across multiple sectors — technology, finance, energy, and industrials — guided by a disciplined, fundamentals-first approach.
         </motion.p>
 
         <motion.div
