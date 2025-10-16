@@ -45,11 +45,9 @@ export default function VideoHero() {
         playsInline
         loop
         preload="none"
-        poster="/media/hero.jpg"
         aria-hidden="true"
         tabIndex={-1}
       >
-        <source src="/media/hero.webm" type="video/webm" />
         <source src="/media/hero.mp4" type="video/mp4" />
       </video>
 
